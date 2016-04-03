@@ -1,13 +1,22 @@
 var api = {};
 global.api = api;
 api.net = require('net');
-
-var user = { name: 'Marcus Aurelius', age: 1895 };
+var port = 2010;
+var user = {name: 'Marcus Aurelius'}
+var task = [1, 2, 3, 4, 5, 6];
 
 var server = api.net.createServer(function(socket) {
-  socket.write(JSON.stringify(user));
   console.log('Connected: ' + socket.localAddress);
+  socket.write(JSON.stringify(task));
   socket.on('data', function(data) {
-    console.log('Data received (by server): ' + data);
+    var result = JSON.parse(data);
+    console.log('result ' + result);
   });
-}).listen(2000);
+}).listen(port);
+
+function publishTask(socket, task) {
+  socket.write(JSON.stringify(task));
+//socket.end('')
+}
+
+setInterval(() => server.unref(), 4000);

@@ -4,15 +4,15 @@ api.net = require('net');
 
 var socket = new api.net.Socket();
 var user;
+var port = 2010;
 
 socket.connect({
-  port: 2000,
+  port: port,
   host: '127.0.0.1',
 }, function() {
-  socket.write('Hello from client');
   socket.on('data', function(data) {
-    user = JSON.parse(data);
-    console.log('Data received (by client): ' + data);
-    console.log('Age of ' + user.name + ' is ' + user.age);
+    task = JSON.parse(data);
+    task = task.map((x) => 2*x);
+    socket.write(JSON.stringify(task));
   });
 });
